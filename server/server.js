@@ -44,7 +44,17 @@ app.use(convertToApiError)
 app.use((err, req, res, next) => {
     handleError(err, res);
 })
-port = process.env.PORT || 3001;
+
+app.use(express.static('client/build'));
+if(process.env.NODE_ENV === 'production'){
+const path = require('path');
+app.get('/*',(req,res)=>{
+res.sendFile(path.resolve(__dirname,'../client','build','index.html'))
+})
+}
+
+
+const port = process.env.PORT || 3001;
 
 app.listen(port, () => {
     console.log(`server listening on port ${port}`);
